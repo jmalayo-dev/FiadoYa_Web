@@ -1,0 +1,53 @@
+@import 'tailwindcss';
+@import '@fontsource/atkinson-hyperlegible-next/400.css';
+@import '@fontsource/atkinson-hyperlegible-next/600.css';
+@import '@fontsource/atkinson-hyperlegible-next/700.css';
+
+/* Sistema visual Grafito Sobrio (docs/stitch_fiadoya_bodega_dashboard/grafito_sobrio_ledger/DESIGN.md). */
+@theme {
+  --font-sans: 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif;
+
+  --color-fondo: #f3f4f6;
+  --color-superficie: #ffffff;
+  --color-borde: #d1d5db;
+  --color-tinta: #111827;
+  --color-tinta-2: #4b5563;
+  --color-tinta-3: #6b7280;
+
+  --color-primario: #1f2937;
+  --color-primario-hover: #111827;
+  --color-acento: #10b981;
+  --color-acento-hover: #059669;
+
+  --color-deuda: #b91c1c;
+  --color-deuda-bg: #fef2f2;
+  --color-alerta: #b45309;
+  --color-alerta-bg: #fffbeb;
+  --color-ok: #047857;
+  --color-ok-bg: #ecfdf5;
+  --color-info: #1d4ed8;
+  --color-info-bg: #eff6ff;
+
+  --radius-control: 0.5rem;
+  --radius-tarjeta: 0.75rem;
+
+  --shadow-hoja: 0 10px 15px -3px rgb(17 24 39 / 0.1), 0 4px 6px -2px rgb(17 24 39 / 0.05);
+  --shadow-elevada: 0 2px 4px 0 rgb(17 24 39 / 0.06), 0 1px 2px 0 rgb(17 24 39 / 0.04);
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-fondo text-tinta font-sans antialiased;
+  }
+  /* Montos y cantidades en cifras tabulares */
+  .cifras {
+    font-variant-numeric: tabular-nums;
+  }
+  :focus-visible {
+    outline: 3px solid rgb(31 41 55 / 0.35);
+    outline-offset: 2px;
+  }
+}

@@ -1,0 +1,2 @@
+// Generado al iniciar el contenedor (envsubst). No contiene secretos.
+window.__CONFIG__ = { API_BASE: "/api", FEATURE_RECIBIR: "${FEATURE_RECIBIR}" };
