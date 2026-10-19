@@ -51,6 +51,14 @@ async function aApiError(error: AxiosError): Promise<ApiError> {
     title: 'Error',
     status: error.response.status,
     detail: '',
-    code: error.response.status === 401 ? 'AUTH_TOKEN_EXPIRED' : 'DESCONOCIDO',
+    code: codigoPorEstado(error.response.status),
   };
+}
+
+function codigoPorEstado(status: number): string {
+  if (status === 401) return 'AUTH_TOKEN_EXPIRED';
+  if (status === 403) return 'AUTH_FORBIDDEN';
+  if (status === 404) return 'NOT_FOUND';
+  if (status === 503) return 'SERVICIO_NO_DISPONIBLE';
+  return 'DESCONOCIDO';
 }
