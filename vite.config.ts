@@ -15,7 +15,13 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 5173,
       proxy: {
-        '/api': { target: destino, changeOrigin: true },
+        '/api': {
+          target: destino,
+          changeOrigin: true,
+          // El proxy hace que todo sea del mismo origen: sin Origin, el gateway no aplica CORS.
+          // Así funciona igual desde localhost o desde la IP de la red (npm run dev:lan).
+          configure: (proxy) => proxy.on('proxyReq', (req) => req.removeHeader('origin')),
+        },
       },
     },
     test: {
