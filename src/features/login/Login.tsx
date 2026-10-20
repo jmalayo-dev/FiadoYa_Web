@@ -144,17 +144,9 @@ export function Login() {
             <div className="border-t border-borde pt-4 text-center text-sm text-tinta-2">
               <p>¿Problemas para entrar? Consulta con el bodeguero.</p>
               <p className="mt-1">¿Olvidaste tu contraseña? Solicita restablecerla en la bodega.</p>
-              {import.meta.env.DEV && (
+              {import.meta.env.DEV && config.usarMocks && (
                 <p className="mt-3 rounded-control bg-info-bg p-2 text-info">
-                  {config.usarMocks ? (
-                    <>
-                      Demo (mocks): <b>bodeguero / Demo12345</b> · <b>cliente1 / Demo12345</b>
-                    </>
-                  ) : (
-                    <>
-                      Demo: <b>bodeguero</b> con ADMIN_PASSWORD del .env · <b>cliente1</b> con DEMO_CLIENTE_PASSWORD
-                    </>
-                  )}
+                  Demo (mocks): <b>bodeguero / Demo12345</b> · <b>cliente1 / Demo12345</b>
                 </p>
               )}
             </div>
