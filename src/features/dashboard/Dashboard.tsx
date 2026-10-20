@@ -128,7 +128,7 @@ function UltimasAlertas() {
       </div>
       {alertas.length === 0 ? (
         <Tarjeta className="flex items-center gap-3 p-4 text-sm text-tinta-2">
-          <Wallet className="size-5 text-ok" aria-hidden /> Todo el stock está al día.
+          <Wallet className="size-5 text-ok" aria-hidden /> Sin alertas nuevas.
         </Tarjeta>
       ) : (
         <ListaAlertas alertas={alertas.slice(0, 5)} compacta />

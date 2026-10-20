@@ -1,7 +1,9 @@
 import { CheckCircle2, Eye, Package, Truck, UserRoundX, Wifi, WifiOff } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
+import { useProductos } from '@/api/productos';
 import type { Alerta } from '@/api/tipos';
+import { StockBadge } from '@/components/EstadoBadge';
 import { Pagina } from '@/components/Shell';
 import { Vacio } from '@/components/Estados';
 import { Insignia } from '@/components/ui/Insignia';
@@ -21,6 +23,9 @@ export function Alertas() {
     marcarLeidas();
   }, [alertas.length, marcarLeidas]);
 
+  // Estado actual del inventario: incluye productos que ya estaban bajo el mínimo y nunca generaron un evento.
+  const porAgotar = useProductos({ soloBajos: true, size: 100 });
+  const bajos = porAgotar.data?.content ?? [];
   const visibles = filtro === 'todas' ? alertas : alertas.filter((a) => a.tipo === filtro);
   const contar = (t: Filtro) => (t === 'todas' ? alertas.length : alertas.filter((a) => a.tipo === t).length);
 
@@ -30,6 +35,30 @@ export function Alertas() {
         {conectado ? <Wifi className="size-4 text-ok" aria-hidden /> : <WifiOff className="size-4 text-alerta" aria-hidden />}
         {conectado ? 'Recibiendo alertas en tiempo real' : 'Reconectando… se revisa cada 15 s'}
       </div>
+      {filtro !== 'LIMITE_CLIENTE' && bajos.length > 0 && (
+        <section className="flex flex-col gap-2" aria-label="Productos por agotar">
+          <h2 className="text-lg font-bold">Por agotar ahora ({bajos.length})</h2>
+          <Tarjeta className="divide-y divide-borde overflow-hidden">
+            {bajos.map((p) => (
+              <div key={p.id} className="flex items-center gap-3 p-4">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-control bg-alerta-bg text-alerta" aria-hidden>
+                  <Package className="size-5" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="flex flex-wrap items-center gap-2 font-semibold">
+                    {p.nombre} <StockBadge stock={p.stock} minimo={p.stockMinimo} />
+                  </p>
+                  <p className="text-sm text-tinta-2">
+                    Quedan <b className="text-deuda">{p.stock}</b> · mínimo {p.stockMinimo}
+                  </p>
+                </div>
+                <EnlaceAccion a={`/reposiciones?producto=${p.id}`} icono={<Truck className="size-4" />} texto="Reponer" />
+              </div>
+            ))}
+          </Tarjeta>
+        </section>
+      )}
+      <h2 className="text-lg font-bold">Historial de alertas</h2>
       <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1" role="group" aria-label="Filtrar alertas">
         {(
           [
@@ -43,7 +72,9 @@ export function Alertas() {
           </Chip>
         ))}
       </div>
-      {visibles.length === 0 ? (
+      {visibles.length === 0 && bajos.length > 0 ? (
+        <Tarjeta className="p-4 text-sm text-tinta-2">Sin alertas nuevas desde que se inició el servicio.</Tarjeta>
+      ) : visibles.length === 0 ? (
         <Vacio
           icono={<CheckCircle2 className="size-7" />}
           mensaje="Todo el stock está al día."
